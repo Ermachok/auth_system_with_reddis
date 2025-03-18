@@ -1,0 +1,27 @@
+[project]
+name = "auth-system-with-reddis"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "NikitaErmakov",email = "ermafin@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "redis (>=5.2.1,<6.0.0)",
+    "jwt (>=1.3.1,<2.0.0)",
+    "fastapi (>=0.115.11,<0.116.0)",
+    "uvicorn (>=0.34.0,<0.35.0)",
+    "python-dotenv (>=1.0.1,<2.0.0)",
+    "pyjwt (>=2.10.1,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^6.0.1"
+
