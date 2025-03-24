@@ -9,7 +9,6 @@ def verify_token(request: Request, authorization: str = Header(None)):
     if authorization:
         token = authorization.split(" ")[1] if " " in authorization else authorization
     else:
-
         token_cookie = request.cookies.get("access_token")
         if token_cookie:
             token = token_cookie.split(" ")[1] if " " in token_cookie else token_cookie
@@ -18,7 +17,7 @@ def verify_token(request: Request, authorization: str = Header(None)):
         raise HTTPException(status_code=401, detail="Token not provided")
 
     if not redis_client.sismember("whitelist", token) or redis_client.sismember(
-        "blacklist", token
+            "blacklist", token
     ):
         raise HTTPException(status_code=401, detail="Token not allowed")
 

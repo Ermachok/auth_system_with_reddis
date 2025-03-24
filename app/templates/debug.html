@@ -1,22 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Debug Tokens</title>
-</head>
-<body>
-  <h2>Add Token to Redis (Whitelist)</h2>
-  <form method="post">
-    Username: <input type="text" name="username"><br>
-    Role:
-    <select name="role">
-      <option value="admin">Admin</option>
-      <option value="user">User</option>
-    </select><br>
-    <button type="submit">Generate & Add Token</button>
-  </form>
+{% extends "base.html" %}
 
-  {% if token %}
-    <p>Generated Token: <code>{{ token }}</code></p>
-  {% endif %}
-</body>
-</html>
+{% block title %}Debug Tokens{% endblock %}
+
+{% block content %}
+<h2 class="text-xl font-bold mb-4 text-center">Debug: Add Token</h2>
+<form method="post" class="flex flex-col gap-4">
+    <input class="border rounded px-3 py-2" type="text" name="username" placeholder="Username" required>
+    <select class="border rounded px-3 py-2" name="role">
+        <option value="admin">Admin</option>
+        <option value="user">User</option>
+    </select>
+    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Generate Token</button>
+</form>
+
+{% if token %}
+    <div class="mt-4 p-4 bg-gray-100 rounded">
+        <p><strong>Generated Token:</strong></p>
+        <code class="text-xs break-words">{{ token }}</code>
+    </div>
+{% endif %}
+{% endblock %}
