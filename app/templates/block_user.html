@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Block User{% endblock %}
+
+{% block content %}
+<h2 class="text-xl font-bold mb-4 text-center">Block User by Username</h2>
+<form method="post" class="flex flex-col gap-4">
+    <input class="border rounded px-3 py-2" type="text" name="username" placeholder="Username to block" required>
+    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Block User</button>
+</form>
+
+{% if blocked_username %}
+    <div class="mt-4 p-4 bg-gray-100 rounded text-center">
+        <p><strong>{{ blocked_username }}</strong> has been blocked.</p>
+        <p>Tokens revoked: {{ blocked_count }}</p>
+    </div>
+{% endif %}
+{% endblock %}

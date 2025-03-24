@@ -3,8 +3,8 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from app.redis_client import redis_client
-from app.utils.auth import create_token
-from app.utils.dependencies import verify_token
+from app.utils.auth import create_token, decode_token
+from app.utils.dependencies import verify_token, role_required
 
 templates = Jinja2Templates(directory="app/templates")
 
@@ -55,3 +55,29 @@ def logout(request: Request):
     response = RedirectResponse(url="/login/", status_code=302)
     response.delete_cookie("access_token")
     return response
+
+
+@router.get("/admin/block/")
+def block_user_form(request: Request, user=Depends(role_required("admin"))):
+    return templates.TemplateResponse("block_user.html", {"request": request})
+
+@router.post("/admin/block/")
+def block_user(request: Request, user=Depends(role_required("admin")), username: str = Form(...)):
+    tokens = redis_client.smembers("whitelist")
+    blocked_tokens = []
+
+    for token in tokens:
+        try:
+            payload = decode_token(token)
+            if payload.get("sub") == username:
+                redis_client.srem("whitelist", token)
+                redis_client.sadd("blacklist", token)
+                blocked_tokens.append(token)
+        except Exception:
+            continue
+
+    return templates.TemplateResponse("block_user.html", {
+        "request": request,
+        "blocked_username": username,
+        "blocked_count": len(blocked_tokens)
+    })
